@@ -1,12 +1,22 @@
 import { createRouter, createWebHistory } from "vue-router";
 import AuthLayout from "../layouts/AuthLayout";
+import UserLayout from "../layouts/UserLayout";
+import Login from '../views/Login'
 
 const routes = [
   {
     name: "Home",
     path: "/",
-    component: AuthLayout,
+    component: UserLayout,
   },
+  {
+    name: "Login",
+    path: "/login",
+    component: Login,
+    meta: {
+      layout: 'auth-layout'
+    }
+  }
 ];
 
 const router = createRouter({

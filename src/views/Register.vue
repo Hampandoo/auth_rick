@@ -2,17 +2,17 @@
   <div class="flex flex-col h-screen bg-gray-100">
     <div class="grid place-items-center mx-2 my-20 sm:my-auto">
       <div
-        class="w-11/12 p-12 sm:w-8/12 md:w-6/12 lg:w-5/12 2xl:w-4/12 px-6 py-10 sm:px-10 sm:py-6 bg-white rounded-lg shadow-md lg:shadow-lg border border-cyan-500"
+        class="w-11/12 p-12 sm:w-8/12 md:w-6/12 lg:w-5/12 2xl:w-4/12 px-6 py-10 sm:px-10 sm:py-6 bg-white rounded-lg shadow-md lg:shadow-lg border border-lime-500"
       >
         <h2
           class="text-center font-semibold text-3xl lg:text-4xl text-gray-800"
         >
-          Login
+          Register new account
         </h2>
 
         <Form 
         class="mt-10" 
-        @submit="pushLogin"
+        @submit="register"
         :validation-schema="schema"
         >
         <div class="mb-2" v-if="message">
@@ -52,19 +52,15 @@
 
           <button
             type="submit"
-            class="w-full py-3 mt-10 bg-cyan-500 rounded-sm font-medium text-white uppercase focus:outline-none hover:bg-gray-700 hover:shadow-none"
+            class="w-full py-3 mt-10 bg-lime-500 rounded-sm font-medium text-white uppercase focus:outline-none hover:bg-gray-700 hover:shadow-none"
           >
-            Login
+            Sign Up
           </button>
 
           <div class="sm:flex sm:flex-wrap mt-8 sm:mb-4 text-sm text-center">
-            <a href="forgot-password" class="flex-2 underline">
-              Forgot password?
-            </a>
-
-            <p class="flex-1 text-gray-500 text-md mx-4 my-1 sm:my-auto">or</p>
-
-            <router-link to="/register" class="flex-2 underline"> Create an Account </router-link>
+            <router-link to="/login" class="flex-2 underline">
+              Back to Login page?
+            </router-link>
           </div>
         </Form>
       </div>
@@ -99,17 +95,16 @@ export default {
     return {
       schema,
       loading: false,
-      message: null,
+      message: null
     };
   },
   methods: {
     ...mapActions({
-      login: 'auth/login'
+      signUp: "auth/register"
     }),
-    async pushLogin(userData) {
+    async register(userData) {
       try {
-        await this.login(userData)
-        router.push('/')
+        await this.signUp(userData)
       } catch(e) {
         this.message = e
       }
@@ -120,11 +115,6 @@ export default {
     Field,
     ErrorMessage
   },
-  mounted() {
-    if (this.$route.query.message) {
-      this.message = error(this.$route.query.message)
-    }
-  }
 };
 </script>
 

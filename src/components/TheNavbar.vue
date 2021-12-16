@@ -76,10 +76,15 @@
 
 <script>
 import router from '../router'
+import { mapMutations } from 'vuex'
 
 export default {
   methods: {
+    ...mapMutations({
+      REMOVE_TOKEN: 'auth/REMOVE_TOKEN'
+    }),
     logout() {
+      this.REMOVE_TOKEN()
       router.push('/login')
     }
   }

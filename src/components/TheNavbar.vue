@@ -35,7 +35,7 @@
       </router-link>
 
       <router-link
-        to="/"
+        to="/profile"
         class="
           px-4
           py-2

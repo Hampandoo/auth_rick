@@ -1,6 +1,4 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Login from '../views/Login'
-import Products from '../views/Products'
 import store from '../store'
 
 
@@ -8,7 +6,17 @@ const routes = [
   {
     name: "Home",
     path: "/",
-    component: Products,
+    alias: '/products',
+    component: () => import('../views/Products'),
+    meta: {
+      layout: "user",
+      auth: true
+    }
+  },
+  {
+    name: "Profile",
+    path: "/profile",
+    component: () => import('../views/Profile'),
     meta: {
       layout: "user",
       auth: true
@@ -17,7 +25,7 @@ const routes = [
   {
     name: "Login",
     path: "/login",
-    component: Login,
+    component: () => import('../views/Login'),
     meta: {
       layout: "auth",
       auth: false
@@ -37,6 +45,8 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
+  linkActiveClass: 'border-b-4 border-cyan-500',
+  linkExactActiveClass: 'border-b-4 border-cyan-500'
 });
 
 router.beforeEach( (to, from, next) => {
@@ -46,6 +56,8 @@ router.beforeEach( (to, from, next) => {
     next()
   } else if (requireAuth && !store.getters['auth/isAuthenticated']) {
     next('login?message=auth')
+  }  else if (!requireAuth && store.getters['auth/isAuthenticated']) {
+    next('/')
   } else {
     next()
   }

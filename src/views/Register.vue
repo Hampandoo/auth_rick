@@ -18,6 +18,9 @@
         <div class="mb-2" v-if="message">
           <h3 class="text-red-600">{{ message }}</h3>
         </div>
+        <div class="mb-2" v-if="successMessage">
+          <h3 class="text-green-600">{{ successMessage }}</h3>
+        </div>
           <label
             for="email"
             class="block text-xs font-semibold text-gray-600 uppercase"
@@ -95,7 +98,8 @@ export default {
     return {
       schema,
       loading: false,
-      message: null
+      message: null,
+      successMessage: null
     };
   },
   methods: {
@@ -105,6 +109,9 @@ export default {
     async register(userData) {
       try {
         await this.signUp(userData)
+        this.successMessage = "Registration success"
+        this.message = null
+        setTimeout( () => router.push('/login'), 2000 )
       } catch(e) {
         this.message = e
       }

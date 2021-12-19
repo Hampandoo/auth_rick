@@ -52,12 +52,12 @@ export default {
       getProfile: "user/getProfile"
     }),
   },
+    components: {
+    TheProfileChange
+  },
   mounted() {
    this.getProfile()
   },
-  components: {
-    TheProfileChange
-  }
 }
 </script>
 

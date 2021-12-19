@@ -17,7 +17,8 @@
   >
     <div class="flex items-center">
       <router-link
-        to="/"
+        to="/products/:page"
+        :class="[{'border-b-4 border-cyan-500': $route.name === 'Products'}]"
         class="
           px-4
           py-2

@@ -4,18 +4,23 @@ import store from '../store'
 
 const routes = [
   {
-    name: "Home",
-    path: "/",
-    alias: '/products',
+    name: "Products",
+    path: "/products/:page",
     component: () => import('../views/Products'),
     meta: {
       layout: "user",
       auth: true
     }
   },
+  // {
+  //     name: "character",
+  //     path: "/character/:id",
+  //     component: () => import('../components/AppCharacter')
+  // },
   {
     name: "Profile",
     path: "/profile",
+    alias: "/",
     component: () => import('../views/Profile'),
     meta: {
       layout: "user",

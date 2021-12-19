@@ -46,6 +46,10 @@ export const auth = {
       } catch (e) {
         throw error(e.response.data.error.message)
       }
+    },
+    logout({commit}) {
+      commit('REMOVE_TOKEN')
+      commit('REMOVE_LOCAL_ID')
     }
   },
   getters: {

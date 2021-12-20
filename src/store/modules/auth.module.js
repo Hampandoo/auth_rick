@@ -16,7 +16,7 @@ export const auth = {
     },
     REMOVE_TOKEN(state) {
       state.token = null,
-      localStorage.removeItem('jwt')
+        localStorage.removeItem('jwt')
     },
     SET_LOCAL_ID(state, localId) {
       state.localId = localId
@@ -28,18 +28,18 @@ export const auth = {
     }
   },
   actions: {
-    async login({commit}, payload) {
+    async login({ commit }, payload) {
       try {
         const API_URL = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.VUE_APP_BACKEND_API_KEY}`
-        const { data } = await axios.post(API_URL, {...payload, returnSecureToken: true})
+        const { data } = await axios.post(API_URL, { ...payload, returnSecureToken: true })
         commit('SET_TOKEN', data.idToken)
         commit('SET_LOCAL_ID', data.localId)
-        
-      } catch(e) {
+
+      } catch (e) {
         throw error(e.response.data.error.message)
       }
     },
-    async register({commit}, payload) {
+    async register({ commit }, payload) {
       try {
         const API_URL = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${process.env.VUE_APP_BACKEND_API_KEY}`
         await axios.post(API_URL, payload)
@@ -47,7 +47,7 @@ export const auth = {
         throw error(e.response.data.error.message)
       }
     },
-    logout({commit}) {
+    logout({ commit }) {
       commit('REMOVE_TOKEN')
       commit('REMOVE_LOCAL_ID')
     }

@@ -18,7 +18,7 @@
     <div class="flex items-center">
       <router-link
         to="/products/:page"
-        :class="[{'border-b-4 border-cyan-500': $route.name === 'Products'}]"
+        :class="[{ 'border-b-4 border-cyan-500': $route.name === 'Products' }]"
         class="
           px-4
           py-2
@@ -66,7 +66,7 @@
           text-white
           uppercase
           focus:outline-none
-          hover:bg-gray-700 
+          hover:bg-gray-700
         "
       >
         Logout
@@ -76,22 +76,21 @@
 </template>
 
 <script>
-import router from '../router'
-import { mapMutations } from 'vuex'
+import router from "../router";
+import { mapActions } from "vuex";
 
 export default {
   methods: {
-    ...mapMutations({
-      REMOVE_TOKEN: 'auth/REMOVE_TOKEN'
+    ...mapActions({
+      loginOut: "auth/logout",
     }),
     logout() {
-      this.REMOVE_TOKEN()
-      router.push('/login')
-    }
-  }
-}
+      this.loginOut();
+      router.push("/login");
+    },
+  },
+};
 </script>
 
 <style>
-
 </style>

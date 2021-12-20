@@ -10,13 +10,8 @@ const routes = [
     meta: {
       layout: "user",
       auth: true
-    }
+    },
   },
-  // {
-  //     name: "character",
-  //     path: "/character/:id",
-  //     component: () => import('../components/AppCharacter')
-  // },
   {
     name: "Profile",
     path: "/profile",
@@ -25,7 +20,13 @@ const routes = [
     meta: {
       layout: "user",
       auth: true
-    }
+    },
+    children: [
+      {
+        path: "edit",
+        component: () => import('../components/TheProfileChange')
+      },
+    ]
   },
   {
     name: "Login",
@@ -54,14 +55,14 @@ const router = createRouter({
   linkExactActiveClass: 'border-b-4 border-cyan-500'
 });
 
-router.beforeEach( (to, from, next) => {
+router.beforeEach((to, from, next) => {
   const requireAuth = to.meta.auth
 
   if (requireAuth && store.getters['auth/isAuthenticated']) {
     next()
   } else if (requireAuth && !store.getters['auth/isAuthenticated']) {
     next('login?message=auth')
-  }  else if (!requireAuth && store.getters['auth/isAuthenticated']) {
+  } else if (!requireAuth && store.getters['auth/isAuthenticated']) {
     next('/')
   } else {
     next()

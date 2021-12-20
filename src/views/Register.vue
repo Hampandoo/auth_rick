@@ -2,25 +2,36 @@
   <div class="flex flex-col h-screen bg-gray-100">
     <div class="grid place-items-center mx-2 my-20 sm:my-auto">
       <div
-        class="w-11/12 p-12 sm:w-8/12 md:w-6/12 lg:w-5/12 2xl:w-4/12 px-6 py-10 sm:px-10 sm:py-6 bg-white rounded-lg shadow-md lg:shadow-lg border border-lime-500"
+        class="
+          w-11/12
+          p-12
+          sm:w-8/12
+          md:w-6/12
+          lg:w-5/12
+          2xl:w-4/12
+          px-6
+          py-10
+          sm:px-10 sm:py-6
+          bg-white
+          rounded-lg
+          shadow-md
+          lg:shadow-lg
+          border border-lime-500
+        "
       >
         <h2
           class="text-center font-semibold text-3xl lg:text-4xl text-gray-800"
         >
-          Register new account
+          Sign Up
         </h2>
 
-        <Form 
-        class="mt-10" 
-        @submit="register"
-        :validation-schema="schema"
-        >
-        <div class="mb-2" v-if="message">
-          <h3 class="text-red-600">{{ message }}</h3>
-        </div>
-        <div class="mb-2" v-if="successMessage">
-          <h3 class="text-green-600">{{ successMessage }}</h3>
-        </div>
+        <Form class="mt-10" @submit="register" :validation-schema="schema">
+          <div class="mb-2" v-if="message">
+            <h3 class="text-red-600">{{ message }}</h3>
+          </div>
+          <div class="mb-2" v-if="successMessage">
+            <h3 class="text-green-600">{{ successMessage }}</h3>
+          </div>
           <label
             for="email"
             class="block text-xs font-semibold text-gray-600 uppercase"
@@ -32,7 +43,17 @@
             name="email"
             placeholder="e-mail address"
             autocomplete="email"
-            class="block w-full py-3 px-1 mt-2 text-gray-800 appearance-none border-b-2 border-gray-100 focus:text-gray-500 focus:outline-none focus:border-gray-200"
+            class="
+              block
+              w-full
+              py-3
+              px-1
+              mt-2
+              text-gray-800
+              appearance-none
+              border-b-2 border-gray-100
+              focus:text-gray-500 focus:outline-none focus:border-gray-200
+            "
             required
           />
           <ErrorMessage name="email" class="text-red-600" />
@@ -48,14 +69,36 @@
             name="password"
             placeholder="password"
             autocomplete="current-password"
-            class="block w-full py-3 px-1 mt-2 mb-4 text-gray-800 appearance-none border-b-2 border-gray-100 focus:text-gray-500 focus:outline-none focus:border-gray-200"
+            class="
+              block
+              w-full
+              py-3
+              px-1
+              mt-2
+              mb-4
+              text-gray-800
+              appearance-none
+              border-b-2 border-gray-100
+              focus:text-gray-500 focus:outline-none focus:border-gray-200
+            "
             required
           />
           <ErrorMessage name="password" class="text-red-600" />
 
           <button
             type="submit"
-            class="w-full py-3 mt-10 bg-lime-500 rounded-sm font-medium text-white uppercase focus:outline-none hover:bg-gray-700 hover:shadow-none"
+            class="
+              w-full
+              py-3
+              mt-10
+              bg-lime-500
+              rounded-sm
+              font-medium
+              text-white
+              uppercase
+              focus:outline-none
+              hover:bg-gray-700 hover:shadow-none
+            "
           >
             Sign Up
           </button>
@@ -74,9 +117,9 @@
 <script>
 import { Form, Field, ErrorMessage } from "vee-validate";
 import * as yup from "yup";
-import { mapActions } from 'vuex'
-import router from '../router'
-import { error } from '../utils/error'
+import { mapActions } from "vuex";
+import router from "../router";
+import { error } from "../utils/error";
 
 export default {
   data() {
@@ -99,28 +142,28 @@ export default {
       schema,
       loading: false,
       message: null,
-      successMessage: null
+      successMessage: null,
     };
   },
   methods: {
     ...mapActions({
-      signUp: "auth/register"
+      signUp: "auth/register",
     }),
     async register(userData) {
       try {
-        await this.signUp(userData)
-        this.successMessage = "Registration success"
-        this.message = null
-        setTimeout( () => router.push('/login'), 2000 )
-      } catch(e) {
-        this.message = e
+        await this.signUp(userData);
+        this.successMessage = "Registration success";
+        this.message = null;
+        setTimeout(() => router.push("/login"), 2000);
+      } catch (e) {
+        this.message = e;
       }
     },
   },
   components: {
     Form,
     Field,
-    ErrorMessage
+    ErrorMessage,
   },
 };
 </script>

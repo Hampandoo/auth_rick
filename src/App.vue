@@ -1,27 +1,23 @@
 <template>
-  <html-head>
-    <component :is="layout + '-layout'" v-if="layout">
-      <router-view />
-    </component>
-  </html-head>
+  <component :is="layout + '-layout'" v-if="layout">
+    <router-view />
+  </component>
 </template>
 
 <script>
-import UserLayout from "./layouts/UserLayout.vue";
-import AuthLayout from "./layouts/AuthLayout.vue";
-import HtmlHead from "./components/HtmlHead.vue";
+import UserLayout from './layouts/UserLayout.vue'
+import AuthLayout from './layouts/AuthLayout.vue'
 
 export default {
   components: {
     UserLayout,
-    AuthLayout,
-    HtmlHead,
+    AuthLayout
   },
   computed: {
     layout() {
-      return this.$route.meta.layout;
-    },
-  },
+      return this.$route.meta.layout
+    }
+  }
 };
 </script>
 

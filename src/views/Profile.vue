@@ -70,6 +70,9 @@ import { mapActions, mapGetters } from "vuex";
 import AppLoader from "../components/AppLoader";
 
 export default {
+  components: {
+    AppLoader,
+  },
   data() {
     return {
       loading: false,
@@ -90,9 +93,6 @@ export default {
         this.loading = false;
       });
     },
-  },
-  components: {
-    AppLoader,
   },
   mounted() {
     this.loadProfile();

@@ -90,6 +90,11 @@ import TheFilter from "../components/TheFilter.vue";
 import AppLoader from "../components/AppLoader";
 
 export default {
+  components: {
+    AppPagination,
+    TheFilter,
+    AppLoader,
+  },
   data() {
     return {
       loading: false,
@@ -113,11 +118,6 @@ export default {
         this.loading = false;
       });
     },
-  },
-  components: {
-    AppPagination,
-    TheFilter,
-    AppLoader,
   },
   mounted() {
     if (this.getCharacters.length === 0) {

@@ -122,6 +122,11 @@ import router from "../router";
 import { error } from "../utils/error";
 
 export default {
+  components: {
+    Form,
+    Field,
+    ErrorMessage,
+  },
   data() {
     const schema = yup.object().shape({
       email: yup
@@ -159,11 +164,6 @@ export default {
         this.message = e;
       }
     },
-  },
-  components: {
-    Form,
-    Field,
-    ErrorMessage,
   },
 };
 </script>

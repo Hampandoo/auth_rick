@@ -23,8 +23,7 @@ export const user = {
       }
     },
     async changeProfile({ commit }, data) {
-      const response = await axios.patch(`https://rick-backend-default-rtdb.europe-west1.firebasedatabase.app/users/${localStorage.getItem('localId')}.json?auth=${localStorage.getItem('jwt')}`, data)
-      return response
+      return await axios.patch(`https://rick-backend-default-rtdb.europe-west1.firebasedatabase.app/users/${localStorage.getItem('localId')}.json?auth=${localStorage.getItem('jwt')}`, data)
     },
   },
   getters: {

@@ -1,4 +1,4 @@
-import { createStore, createLogger } from "vuex";
+import { createStore } from "vuex";
 import { auth } from './modules/auth.module'
 import { user } from './modules/user.module'
 import { products } from './modules/products.module'

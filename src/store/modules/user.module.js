@@ -16,13 +16,15 @@ export const user = {
       try {
         const data = await axios.get(`https://rick-backend-default-rtdb.europe-west1.firebasedatabase.app/users/${localStorage.getItem('localId')}.json?auth=${localStorage.getItem('jwt')}`)
         commit('CHANGE_USER', data.data)
+        return data.data
       } catch (e) {
         dispatch("auth/logout", null, { root: true });
         router.push('/login')
       }
     },
     async changeProfile({ commit }, data) {
-      await axios.patch(`https://rick-backend-default-rtdb.europe-west1.firebasedatabase.app/users/${localStorage.getItem('localId')}.json?auth=${localStorage.getItem('jwt')}`, data)
+      const response = await axios.patch(`https://rick-backend-default-rtdb.europe-west1.firebasedatabase.app/users/${localStorage.getItem('localId')}.json?auth=${localStorage.getItem('jwt')}`, data)
+      return response
     },
   },
   getters: {

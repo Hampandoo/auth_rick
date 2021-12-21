@@ -26,18 +26,25 @@
           Profile
         </h2>
 
-        <div class="mt-4" v-if="getUser">
-          <h3 class="block text-s font-semibold text-gray-600">
-            Username: <span class="text-black">{{ getUser.username }}</span>
-          </h3>
+        <div v-if="!loading">
+          <div class="mt-4" v-if="getUser">
+            <h3 class="block text-s font-semibold text-gray-600">
+              Username: <span class="text-black">{{ getUser.username }}</span>
+            </h3>
 
-          <h3 class="block mt-2 text-s font-semibold text-gray-600">
-            Another info: <span class="text-black">{{ getUser.another }}</span>
-          </h3>
+            <h3 class="block mt-2 text-s font-semibold text-gray-600">
+              Another info:
+              <span class="text-black">{{ getUser.another }}</span>
+            </h3>
+          </div>
         </div>
+
+        <app-loader v-else class="my-8" />
+
         <div class="pt-6 flex justify-center">
           <router-link
             to="/profile/edit"
+            :class="[{ 'bg-gray-800': $route.path === '/profile/edit' }]"
             class="
               inline-block
               bg-gray-600
@@ -47,13 +54,12 @@
               py-2
               px-4
               rounded
-              border border-cyan-500
             "
           >
             Edit your profile?
           </router-link>
         </div>
-        <router-view></router-view>
+        <router-view />
       </div>
     </div>
   </div>
@@ -61,8 +67,14 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import AppLoader from "../components/AppLoader";
 
 export default {
+  data() {
+    return {
+      loading: false,
+    };
+  },
   computed: {
     ...mapGetters({
       getUser: "user/getUser",
@@ -72,9 +84,18 @@ export default {
     ...mapActions({
       getProfile: "user/getProfile",
     }),
+    loadProfile() {
+      this.loading = true;
+      this.getProfile().then(() => {
+        this.loading = false;
+      });
+    },
+  },
+  components: {
+    AppLoader,
   },
   mounted() {
-    this.getProfile();
+    this.loadProfile();
   },
 };
 </script>

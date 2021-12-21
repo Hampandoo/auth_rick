@@ -1,8 +1,6 @@
 import axios from 'axios'
 import { error } from '../../utils/error'
 
-const API_URL = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key="
-
 export const auth = {
   namespaced: true,
   state: {

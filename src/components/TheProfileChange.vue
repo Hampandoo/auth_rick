@@ -84,14 +84,15 @@ export default {
       changeProfile: "user/changeProfile",
       getProfile: "user/getProfile",
     }),
-    async changeData(user) {
-      await this.changeProfile(user);
-      await this.getProfile();
-      router.push("/profile");
+    changeData(user) {
+      this.changeProfile(user)
+        .then(() => {
+          this.getProfile();
+        })
+        .then(() => {
+          router.push("/profile");
+        });
     },
   },
 };
 </script>
-
-<style>
-</style>

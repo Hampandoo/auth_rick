@@ -37,6 +37,12 @@
 
       <router-link
         to="/profile"
+        :class="[
+          {
+            'border-b-4 border-cyan-500':
+              $route.name === 'Profile' || $route.path === '/profile/edit',
+          },
+        ]"
         class="
           px-4
           py-2
@@ -91,6 +97,3 @@ export default {
   },
 };
 </script>
-
-<style>
-</style>

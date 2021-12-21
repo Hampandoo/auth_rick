@@ -1,20 +1,17 @@
 <template>
   <div class="container mx-auto">
-  <the-navbar />
-  <slot />
+    <the-navbar />
+    <slot />
   </div>
 </template>
 
 <script>
-import TheNavbar from '../components/TheNavbar.vue'
+import TheNavbar from "../components/TheNavbar.vue";
 
 export default {
-  name: 'UserLayout',
+  name: "UserLayout",
   components: {
-    TheNavbar
-  }
+    TheNavbar,
+  },
 };
 </script>
-
-<style>
-</style>

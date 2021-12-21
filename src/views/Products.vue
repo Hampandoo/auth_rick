@@ -1,8 +1,9 @@
 <template>
   <the-filter />
-  <app-pagination />
-  <div
-    v-if="getPaginationCharacters.length > 0"
+  <app-pagination v-if="!loading" />
+
+  <section
+    v-if="getPaginationCharacters.length && !loading"
     class="py-4 pr-2 bg-white rounded-lg shadow-md lg:shadow-lg"
   >
     <div
@@ -50,8 +51,12 @@
         </p>
       </div>
     </div>
-  </div>
-  <section v-else class="py-4 pr-2 bg-white rounded-lg shadow-md lg:shadow-lg">
+  </section>
+
+  <section
+    v-else-if="!getPaginationCharacters.length"
+    class="py-4 pr-2 bg-white rounded-lg shadow-md lg:shadow-lg"
+  >
     <div
       class="
         flex flex-row
@@ -74,14 +79,22 @@
       <p class="">There are nobody here</p>
     </div>
   </section>
+
+  <app-loader v-else class="my-8" />
 </template>
 
 <script>
 import { mapActions, mapGetters } from "vuex";
 import AppPagination from "../components/AppPagination.vue";
 import TheFilter from "../components/TheFilter.vue";
+import AppLoader from "../components/AppLoader";
 
 export default {
+  data() {
+    return {
+      loading: false,
+    };
+  },
   computed: {
     ...mapGetters({
       getPaginationCharacters: "products/getPaginationCharacters",
@@ -94,14 +107,21 @@ export default {
       openCharacter: "products/openCharacter",
       load: "products/load",
     }),
+    loadProducts() {
+      this.loading = true;
+      this.load().then(() => {
+        this.loading = false;
+      });
+    },
   },
   components: {
     AppPagination,
     TheFilter,
+    AppLoader,
   },
   mounted() {
     if (this.getCharacters.length === 0) {
-      this.load();
+      this.loadProducts();
     }
   },
 };

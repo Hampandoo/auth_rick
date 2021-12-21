@@ -24,7 +24,10 @@ const routes = [
     children: [
       {
         path: "edit",
-        component: () => import('../components/TheProfileChange')
+        component: () => import('../components/TheProfileChange'),
+        meta: {
+          auth: true
+        }
       },
     ]
   },
@@ -51,8 +54,6 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
-  linkActiveClass: 'border-b-4 border-cyan-500',
-  linkExactActiveClass: 'border-b-4 border-cyan-500'
 });
 
 router.beforeEach((to, from, next) => {

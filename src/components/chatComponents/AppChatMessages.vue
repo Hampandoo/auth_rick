@@ -13,7 +13,7 @@
   >
     <div class="flex sm:items-center justify-between py-3">
       <div class="text-2xl mt-1 flex items-center mx-4">
-        <span class="text-gray-700 mr-3">to: Username</span>
+        <span class="text-gray-700 mr-3">to: {{ searchedUser.email }}</span>
       </div>
     </div>
 
@@ -34,7 +34,14 @@
       "
     >
       <div v-for="message in messages" :key="message.time" class="chat-message">
-        <div class="flex items-end">
+        <div
+          class="flex items-end"
+          :class="
+            message.email.toLowerCase() === getEmailFromStorage
+              ? 'justify-end'
+              : ''
+          "
+        >
           <div
             class="
               flex flex-col
@@ -137,7 +144,7 @@
         />
 
         <button
-          @click="sendMessage"
+          @click="sendMessage(newMessage)"
           type="button"
           class="
             mx-2
@@ -173,18 +180,30 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 import fireDB from "../../utils/firebase";
 import { set, ref, push } from "firebase/database";
 
 export default {
-  props: ["messages"],
+  props: ["messages", "searchedUser"],
   data() {
     return {
       newMessage: "",
     };
   },
+  computed: {
+    getEmailFromStorage() {
+      return localStorage.getItem("email");
+    },
+  },
   methods: {
-    async sendMessage() {},
+    ...mapActions({
+      send: "chat/sendNewMessage",
+    }),
+    async sendMessage(newMessage) {
+      await this.send(newMessage);
+      this.newMessage = "";
+    },
   },
 };
 </script>

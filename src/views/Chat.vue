@@ -13,7 +13,7 @@
       <app-searched-user
         :searchedUser="searchedUser"
         v-if="searchedUser.email"
-        @click="loadOrCreateChat"
+        @click="loadOrCreateChat(searchedUser)"
       />
 
       <div class="rounded flex text-white bg-gray-800 p-2 items-center">
@@ -34,7 +34,11 @@
         <h3 class="align-center ml-2 wrap overflow-hidden">User Email</h3>
       </div>
     </div>
-    <app-chat-messages :messages="messages" />
+    <app-chat-messages
+      v-if="searchedUser"
+      :searchedUser="searchedUser"
+      :messages="messages"
+    />
   </section>
 </template>
 
@@ -75,6 +79,9 @@ export default {
       searchUser: "chat/searchByEmail",
       loadConversations: "chat/loadConversations",
     }),
+    createNewChat() {
+      console.log("Error");
+    },
     async searchByEmail() {
       try {
         this.searchedUser = await this.searchUser(this.searchField);
@@ -84,13 +91,17 @@ export default {
         this.searchField = "";
       }
     },
-    async loadOrCreateChat() {
-      const conversation = await this.loadConversations();
-      if (conversation.length > 0) {
-        this.messages = conversation;
-        return;
-      } else {
-        this.createNewChat();
+    async loadOrCreateChat(anotherUser) {
+      try {
+        const conversation = await this.loadConversations(anotherUser);
+        if (conversation.length > 0) {
+          this.messages = conversation;
+          return;
+        } else {
+          this.createNewChat();
+        }
+      } catch (e) {
+        console.log("Error 1");
       }
     },
   },

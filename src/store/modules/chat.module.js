@@ -13,16 +13,21 @@ import {
   deleteDoc,
   set,
   setDoc,
+  arrayUnion
 } from "@firebase/firestore";
 
 export const chat = {
   namespaced: true,
   state: {
     currentChatMessages: [],
+    currentRoomID: ""
   },
   mutations: {
     FILL_CURRENT_CHAT_MESSAGES(state, payload) {
       state.currentChatMessages = payload
+    },
+    SET_CURRENT_ROOM_ID(state, payload) {
+      state.currentRoomID = payload
     }
   },
   actions: {
@@ -30,36 +35,59 @@ export const chat = {
 
     },
 
-    async loadConversations({ commit }, payload) {
-      const userOne = await getDocs(query(
-        collection(firestore, "chats"),
-        where("user1", "in", ["loli@base.com", "SomeLikeIt@gg.com"])))
-      const userTwo = await getDocs(query(
-        collection(firestore, "chats"),
-        where("user2", "in", ["loli@base.com", "SomeLikeIt@gg.com"])))
-
-      // Могут быть ошибки, где user1 === user2
-      // 
-      // 
-      // 
-
-      let chatRooms = []
-
-      userOne.forEach(doc => {
-        chatRooms.push(doc.id)
-      })
-      userTwo.forEach(doc => {
-        chatRooms.push(doc.id)
-      })
-
-      const conversation = chatRooms.sort().reduce((prev, curr) => {
-        if (prev === curr) {
-          return curr
+    sendNewMessage({ commit, state }, payload) {
+      try {
+        const writeMessage = {
+          email: localStorage.getItem('email'),
+          message: payload,
+          time: Date.now()
         }
-      })
+        updateDoc(doc(firestore, "chats", state.currentRoomID), {
+          concatest: writeMessage
+        })
+      } catch (e) {
+        console.log('Error 2')
+      }
+    },
 
-      const finall = await getDoc(doc(firestore, "chats", conversation))
-      return finall.data().conversation
+    async loadConversations({ commit }, payload) {
+      try {
+        const userOne = await getDocs(query(
+          collection(firestore, "chats"),
+          where("user1", "in", [payload.email, localStorage.getItem('email')])))
+        const userTwo = await getDocs(query(
+          collection(firestore, "chats"),
+          where("user2", "in", [payload.email, localStorage.getItem('email')])))
+
+        // Могут быть ошибки, где user1 === user2
+        // 
+        // 
+        // 
+
+        let chatRooms = []
+
+        userOne.forEach(doc => {
+          chatRooms.push(doc.id)
+        })
+        userTwo.forEach(doc => {
+          chatRooms.push(doc.id)
+        })
+
+        const roomID = chatRooms.sort().reduce((prev, curr) => {
+          if (prev === curr) {
+            return curr
+          }
+        })
+
+        commit('SET_CURRENT_ROOM_ID', roomID)
+
+        const finall = await getDoc(doc(firestore, "chats", roomID))
+
+        return finall.data().conversation
+      } catch (e) {
+        console.log("Error 0")
+        console.log(e)
+      }
     },
 
     async searchByEmail({ commit }, payload) {

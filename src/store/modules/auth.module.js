@@ -5,7 +5,8 @@ export const auth = {
   namespaced: true,
   state: {
     token: localStorage.getItem('jwt'),
-    localId: localStorage.getItem('localId')
+    localId: localStorage.getItem('localId'),
+    email: localStorage.getItem('email')
   },
   mutations: {
     SET_TOKEN(state, token) {
@@ -26,6 +27,7 @@ export const auth = {
     },
     SET_MAIN_EMAIL(state, payload) {
       state.email = payload
+      localStorage.setItem('email', payload)
     }
   },
   actions: {

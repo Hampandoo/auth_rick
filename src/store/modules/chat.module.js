@@ -50,43 +50,52 @@ export const chat = {
       }
     },
 
-    async loadConversations({ commit }, payload) {
+    async loadConversations({ commit, dispatch, state }, payload) {
       try {
-        const userOne = await getDocs(query(
-          collection(firestore, "chats"),
-          where("user1", "in", [payload.email, localStorage.getItem('email')])))
-        const userTwo = await getDocs(query(
-          collection(firestore, "chats"),
-          where("user2", "in", [payload.email, localStorage.getItem('email')])))
+        await dispatch('findRoomID', payload)
 
-        // Могут быть ошибки, где user1 === user2
-        // 
-        // 
-        // 
 
-        let chatRooms = []
 
-        userOne.forEach(doc => {
-          chatRooms.push(doc.id)
-        })
-        userTwo.forEach(doc => {
-          chatRooms.push(doc.id)
-        })
-
-        console.log(chatRooms)
-        const roomID = chatRooms.sort().reduce((prev, curr) => {
-          if (prev === curr) {
-            return curr
-          }
-        })
-
-        commit('SET_CURRENT_ROOM_ID', roomID)
-
-        const finall = await getDoc(doc(firestore, "chats", roomID))
+        const finall = await getDoc(doc(firestore, "chats", state.currentRoomID))
 
         return finall.data().conversation
       } catch (e) {
         console.log("Error 0")
+      }
+    },
+
+    async findRoomID({ commit }, payload) {
+      try {
+        const user1 = await getDocs(query(
+          collection(firestore, "chats"),
+          where("users", "array-contains-any", [payload.email.toLowerCase()])))
+
+        const user2 = await getDocs(query(
+          collection(firestore, "chats"),
+          where("users", "array-contains-any", [localStorage.getItem('email').toLowerCase()])))
+
+        const chatRooms = []
+
+        user1.forEach(doc => {
+          chatRooms.push(doc.id)
+        })
+        user2.forEach(doc => {
+          chatRooms.push(doc.id)
+        })
+
+        chatRooms.sort()
+
+        let roomID = ""
+
+        for (let i = 0; i < chatRooms.length; i++) {
+          if (chatRooms[i] === chatRooms[i + 1]) {
+            roomID = chatRooms[i]
+          }
+        }
+
+        commit('SET_CURRENT_ROOM_ID', roomID)
+      } catch (e) {
+        console.log('Room ID Error')
       }
     },
 

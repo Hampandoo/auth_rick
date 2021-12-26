@@ -43,7 +43,7 @@ export const chat = {
           time: Date.now()
         }
         updateDoc(doc(firestore, "chats", state.currentRoomID), {
-          concatest: writeMessage
+          conversation: arrayUnion(writeMessage)
         })
       } catch (e) {
         console.log('Error 2')
@@ -73,6 +73,7 @@ export const chat = {
           chatRooms.push(doc.id)
         })
 
+        console.log(chatRooms)
         const roomID = chatRooms.sort().reduce((prev, curr) => {
           if (prev === curr) {
             return curr
@@ -86,7 +87,6 @@ export const chat = {
         return finall.data().conversation
       } catch (e) {
         console.log("Error 0")
-        console.log(e)
       }
     },
 

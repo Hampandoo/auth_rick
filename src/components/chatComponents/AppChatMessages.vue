@@ -33,7 +33,7 @@
         h-96
       "
     >
-      <div v-for="message in messages" :key="message.id" class="chat-message">
+      <div v-for="message in messages" :key="message.time" class="chat-message">
         <div class="flex items-end">
           <div
             class="
@@ -48,7 +48,7 @@
           >
             <div>
               <h3 class="bg-gray-800 text-white text-lg rounded-tl px-4">
-                {{ message.name }}
+                {{ message.email }}
               </h3>
               <span
                 class="
@@ -63,7 +63,7 @@
                 "
                 >{{ message.message }}</span
               >
-              <span
+              <!-- <span
                 class="
                   px-4
                   py-2
@@ -74,13 +74,13 @@
                   text-white text-sm
                   leading-tight
                 "
-                >{{ message.timestamp }}</span
-              >
+                >{{ message.time }}</span
+              > -->
             </div>
           </div>
         </div>
       </div>
-      <div class="chat-message">
+      <!-- <div class="chat-message">
         <div class="flex items-end justify-end">
           <div
             class="
@@ -114,12 +114,13 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
+
     <div class="pt-4 mb-2 sm:mb-0">
       <div class="flex">
         <input
-          v-model="message"
+          v-model="newMessage"
           type="text"
           placeholder="Write Something"
           class="
@@ -172,29 +173,18 @@
 </template>
 
 <script>
-import fireDB from "../utils/firebase";
+import fireDB from "../../utils/firebase";
 import { set, ref, push } from "firebase/database";
 
 export default {
+  props: ["messages"],
   data() {
     return {
-      username: "You",
-      messages: [],
-      message: "",
+      newMessage: "",
     };
   },
   methods: {
-    async sendMessage() {
-      try {
-        push(ref(fireDB, "messages/" + 7), {
-          username: "some another message",
-          email: "loli@email.com",
-          date: Date(),
-        });
-      } catch (e) {
-        console.log(e);
-      }
-    },
+    async sendMessage() {},
   },
 };
 </script>

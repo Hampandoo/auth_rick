@@ -10,6 +10,12 @@
         />
       </form>
 
+      <app-searched-user
+        :searchedUser="searchedUser"
+        v-if="searchedUser.email"
+        @click="loadOrCreateChat"
+      />
+
       <div class="rounded flex text-white bg-gray-800 p-2 items-center">
         <img
           class="w-20 h-20 rounded-full object-cover"
@@ -28,13 +34,14 @@
         <h3 class="align-center ml-2 wrap overflow-hidden">User Email</h3>
       </div>
     </div>
-    <app-chat-messages />
+    <app-chat-messages :messages="messages" />
   </section>
 </template>
 
 <script>
+import AppSearchedUser from "../components/chatComponents/AppSearchedUser.vue";
 import firestore from "../utils/firebase";
-import AppChatMessages from "../components/AppChatMessages.vue";
+import AppChatMessages from "../components/chatComponents/AppChatMessages.vue";
 import {
   collection,
   query,
@@ -48,54 +55,43 @@ import {
   set,
   setDoc,
 } from "@firebase/firestore";
+import { mapActions } from "vuex";
 
 export default {
   name: "Chat",
   components: {
     AppChatMessages,
+    AppSearchedUser,
   },
   data() {
     return {
-      messages: [],
       searchField: "",
-      anotherUser: {},
-      roomId: null,
+      searchedUser: {},
+      messages: null,
     };
   },
   methods: {
+    ...mapActions({
+      searchUser: "chat/searchByEmail",
+      loadConversations: "chat/loadConversations",
+    }),
     async searchByEmail() {
       try {
-        const jojo = await getDocs(
-          query(
-            collection(firestore, "users"),
-            where("email", "==", this.searchField)
-          )
-        );
-
-        jojo.forEach((doc) => {
-          this.anotherUser.name = doc.data().name;
-          this.anotherUser.email = doc.data().email;
-          this.anotherUser.id = doc.id;
-        });
-
-        // const key = localStorage.getItem("localId");
-        // await setDoc(doc(firestore, "chats/", key), {
-        //   email: "SomeLikeIt@gg.com",
-        //   name: "Jotaro",
-        // });
+        this.searchedUser = await this.searchUser(this.searchField);
       } catch (e) {
-        console.log(e);
+        console.log("throw an Errorroorroor");
+      } finally {
+        this.searchField = "";
       }
     },
-    async createChat() {
-      // const room = await setDoc(
-      //   doc(firestore, "chats/", key + this.anotherUser.id),
-      //   {
-      //     email: "SomeLikeIt@gg.com",
-      //     name: "Jotaro",
-      //   }
-      // );
-      console.log(this.anotherUser.id);
+    async loadOrCreateChat() {
+      const conversation = await this.loadConversations();
+      if (conversation.length > 0) {
+        this.messages = conversation;
+        return;
+      } else {
+        this.createNewChat();
+      }
     },
   },
 };

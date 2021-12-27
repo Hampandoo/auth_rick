@@ -67,6 +67,7 @@
                   bg-cyan-500
                   text-white text-sm
                   leading-tight
+                  w-full
                 "
                 >{{ message.message }}</span
               >

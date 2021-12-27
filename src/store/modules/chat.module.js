@@ -33,8 +33,8 @@ export const chat = {
   actions: {
     async createNewConversation({ commit }, payload) {
       const newChat = await addDoc(collection(firestore, "chats"), {
-        conversation: [],
-        users: [localStorage.getItem('email'), payload.email]
+        conversation: [{ email: 'Welcome!', message: 'New conversation created!', time: Date.now() }],
+        users: [localStorage.getItem('email').toLowerCase(), payload.email.toLowerCase()]
       })
     },
 

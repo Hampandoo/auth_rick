@@ -10,10 +10,17 @@
         />
       </form>
 
+      <div
+        class="p-1 border border-gray-600 rounded my-1 self-center"
+        v-if="textUserDoesNotExist"
+      >
+        <p>{{ textUserDoesNotExist }}</p>
+      </div>
+
       <app-searched-user
         :searchedUser="searchedUser"
         v-if="searchedUser.email"
-        @click="loadOrCreateChat(searchedUser)"
+        @click="loadOrCreateNewChat(searchedUser)"
       />
 
       <div class="rounded flex text-white bg-gray-800 p-2 items-center">
@@ -72,33 +79,44 @@ export default {
       searchField: "",
       searchedUser: {},
       messages: null,
+      textUserDoesNotExist: "",
     };
   },
   methods: {
     ...mapActions({
       searchUser: "chat/searchByEmail",
       loadConversations: "chat/loadConversations",
+      createNewConversation: "chat/createNewConversation",
     }),
-    createNewChat() {
-      console.log("Error");
+
+    async createNewChat(searchedUser) {
+      const info = await this.createNewConversation(searchedUser);
     },
+
     async searchByEmail() {
       try {
-        this.searchedUser = await this.searchUser(this.searchField);
+        this.textUserDoesNotExist = "";
+        const user = await this.searchUser(this.searchField);
+        if (user.email) {
+          this.searchedUser = user;
+        } else {
+          this.textUserDoesNotExist = "This user does not exist";
+        }
       } catch (e) {
-        console.log("throw an Errorroorroor");
+        console.log(e);
       } finally {
         this.searchField = "";
       }
     },
-    async loadOrCreateChat(anotherUser) {
+
+    async loadOrCreateNewChat(anotherUser) {
       try {
         const conversation = await this.loadConversations(anotherUser);
-        if (conversation.length > 0) {
+        if (conversation) {
           this.messages = conversation;
           return;
         } else {
-          this.createNewChat();
+          this.createNewChat(this.searchedUser);
         }
       } catch (e) {
         console.log("Error 1");

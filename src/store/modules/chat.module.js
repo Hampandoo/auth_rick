@@ -31,8 +31,11 @@ export const chat = {
     }
   },
   actions: {
-    createNewConversation({ commit }, payload) {
-
+    async createNewConversation({ commit }, payload) {
+      const newChat = await addDoc(collection(firestore, "chats"), {
+        conversation: [],
+        users: [localStorage.getItem('email'), payload.email]
+      })
     },
 
     sendNewMessage({ commit, state }, payload) {
@@ -46,7 +49,8 @@ export const chat = {
           conversation: arrayUnion(writeMessage)
         })
       } catch (e) {
-        console.log('Error 2')
+        console.log(e)
+        console.log('Send new message Error')
       }
     },
 
@@ -54,11 +58,14 @@ export const chat = {
       try {
         await dispatch('findRoomID', payload)
 
-
-
         const finall = await getDoc(doc(firestore, "chats", state.currentRoomID))
 
-        return finall.data().conversation
+        if (finall) {
+          return finall.data().conversation
+        } else {
+          console.log('aa')
+          return
+        }
       } catch (e) {
         console.log("Error 0")
       }
@@ -118,6 +125,7 @@ export const chat = {
         return user
       } catch (e) {
         console.log(e);
+        console.log('Search by email Error')
       }
     }
   },

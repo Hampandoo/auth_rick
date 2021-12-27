@@ -59,13 +59,7 @@ export const chat = {
         await dispatch('findRoomID', payload)
 
         const finall = await getDoc(doc(firestore, "chats", state.currentRoomID))
-
-        if (finall) {
-          return finall.data().conversation
-        } else {
-          console.log('aa')
-          return
-        }
+        return finall.data().conversation
       } catch (e) {
         console.log("Error 0")
       }

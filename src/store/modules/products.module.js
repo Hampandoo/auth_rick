@@ -1,5 +1,4 @@
 import axios from 'axios';
-import router from '../../router';
 import { error } from "../../utils/error"
 
 export const products = {
@@ -13,9 +12,6 @@ export const products = {
     maxPages: 0
   },
   mutations: {
-    // LOAD_CHARACTERS(state, characters) {
-    //   state.characters.push(...characters)
-    // },
     LOAD_CHARACTERS(state, characters) {
       state.characters = characters
     },
@@ -33,18 +29,6 @@ export const products = {
     }
   },
   actions: {
-    // async load({ commit }, payload) {
-    //   let loadPage = "https://rickandmortyapi.com/api/character?page=1"
-
-    //   while (loadPage !== null) {
-    //     await axios
-    //       .get(loadPage)
-    //       .then(response => {
-    //         commit('LOAD_CHARACTERS', response.data.results)
-    //         loadPage = response.data.info.next
-    //       })
-    //   }
-    // },
     async load({ commit, state }) {
       let url = `https://rickandmortyapi.com/api/character/?page=${state.page}&status=${state.filtered.status}&gender=${state.filtered.gender}&species=${state.filtered.species}`
 
@@ -69,21 +53,6 @@ export const products = {
     getCharacters(state) {
       return state.characters;
     },
-    // getFilteredCharacters(state) {
-    //   return state.characters.filter((item) => {
-    //     return Object.keys(state.filtered).every(el => {
-    //       if (state.filtered[el].length === 0 || state.filtered[el].includes(item[el])) return true
-    //     })
-    //   })
-    // },
-    // getPaginationCharacters(state, getters) {
-    //   const start = (state.page - 1) * state.cardsPerPage;
-    //   const end = state.page * state.cardsPerPage;
-
-    //   router.push({ name: 'Products', params: { page: state.page } })
-
-    //   return getters.getCharacters.slice(start, end)
-    // },
     pageCount(state) {
       return state.maxPages
     },

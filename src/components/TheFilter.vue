@@ -1,58 +1,65 @@
 <template>
   <section class="mx-auto border-b-2">
-    <form action="" class="py-4 px-4 flex justify-center">
+    <div class="py-4 px-4 flex justify-center">
       <div class="mx-6">
         <h3 class="font-bold text-lg text-gray-500">Status:</h3>
-        <div
-          v-for="field in filter.status"
-          :key="field"
-          class="ml-2 text-black font-semibold"
+        <select
+          name="gender"
+          id="gender"
+          v-model="checked.status"
+          class="border border-gray-800 rounded-lg px-1 py-0.5"
         >
-          <input
-            v-model="checked.status"
-            :value="field"
-            type="checkbox"
-            :id="field"
-            class="cursor-pointer"
-          />
-          <label class="pl-1 cursor-pointer" :for="field">{{ field }}</label>
-        </div>
+          <option selected class="ml-2 text-black font-semibold"></option>
+          <option
+            v-for="field in filter.status"
+            :key="field"
+            class="ml-2 text-black font-semibold"
+          >
+            {{ field }}
+          </option>
+        </select>
       </div>
       <div class="mx-6">
         <h3 class="font-bold text-lg text-gray-500">Gender:</h3>
-        <div
-          v-for="field in filter.gender"
-          :key="field"
-          class="ml-2 text-black font-semibold"
+        <select
+          name="gender"
+          id="gender"
+          v-model="checked.gender"
+          class="border border-gray-800 rounded-lg px-1 py-0.5"
         >
-          <input
-            v-model="checked.gender"
-            :value="field"
-            type="checkbox"
-            :id="field"
-            class="cursor-pointer"
-          />
-          <label class="pl-1 cursor-pointer" :for="field">{{ field }}</label>
-        </div>
+          <option selected class="ml-2 text-black font-semibold"></option>
+          <option
+            v-for="field in filter.gender"
+            :key="field"
+            class="ml-2 text-black font-semibold"
+          >
+            {{ field }}
+          </option>
+        </select>
       </div>
       <div class="mx-6">
         <h3 class="font-bold text-lg text-gray-500">Species:</h3>
-        <div
-          v-for="field in filter.species"
-          :key="field"
-          class="ml-2 text-black font-semibold"
+
+        <select
+          name="species"
+          id="species"
+          v-model="checked.species"
+          class="border border-gray-800 rounded-lg px-1 py-0.5"
         >
-          <input
-            v-model="checked.species"
-            :value="field"
-            type="checkbox"
-            :id="field"
-            class="cursor-pointer"
-          />
-          <label class="pl-1 cursor-pointer" :for="field">{{ field }}</label>
-        </div>
+          <option selected class="ml-2 text-black font-semibold"></option>
+          <option
+            v-for="field in filter.species"
+            :key="field"
+            class="ml-2 text-black font-semibold"
+          >
+            {{ field }}
+          </option>
+        </select>
       </div>
-    </form>
+      <button @click="loadCharacters(checked), $emit('loadByFilter')">
+        Filtering
+      </button>
+    </div>
   </section>
 </template>
 
@@ -60,12 +67,13 @@
 import { mapActions } from "vuex";
 
 export default {
+  emits: ["loadByFilter"],
   data() {
     return {
       checked: {
-        status: [],
-        gender: [],
-        species: [],
+        status: "",
+        gender: "",
+        species: "",
       },
       filter: {
         status: {
@@ -93,11 +101,16 @@ export default {
   },
   methods: {
     ...mapActions({
-      filtering: "products/filterList",
+      setFilter: "products/setFilterList",
+      changePage: "products/changePage",
     }),
+    loadCharacters(checked) {
+      this.setFilter(checked);
+      this.changePage(1);
+    },
   },
   mounted() {
-    this.filtering(this.checked);
+    this.setFilter(this.checked);
   },
 };
 </script>

@@ -1,13 +1,13 @@
 <template>
-  <the-filter />
-  <app-pagination v-if="!loading" />
+  <the-filter @loadByFilter="loadProducts" />
+  <app-pagination @loadByPage="loadProducts" v-if="!loading" />
 
   <section
-    v-if="getPaginationCharacters.length && !loading"
+    v-if="getCharacters.length && !loading"
     class="py-4 pr-2 bg-white rounded-lg shadow-md lg:shadow-lg"
   >
     <div
-      v-for="item in getPaginationCharacters"
+      v-for="item in getCharacters"
       :key="item"
       class="
         flex flex-row
@@ -54,7 +54,7 @@
   </section>
 
   <section
-    v-else-if="!getPaginationCharacters.length"
+    v-else-if="!getCharacters.length"
     class="py-4 pr-2 bg-white rounded-lg shadow-md lg:shadow-lg"
   >
     <div
@@ -85,6 +85,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import router from "../router";
 import AppPagination from "../components/AppPagination.vue";
 import TheFilter from "../components/TheFilter.vue";
 import AppLoader from "../components/AppLoader";
@@ -102,9 +103,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getPaginationCharacters: "products/getPaginationCharacters",
-      getCard: "products/getCard",
       getCharacters: "products/getCharacters",
+      getPage: "products/getPage",
     }),
   },
   methods: {
@@ -114,15 +114,20 @@ export default {
     }),
     loadProducts() {
       this.loading = true;
-      this.load().then(() => {
-        this.loading = false;
-      });
+      this.load()
+        .then(() => {
+          router.push({ name: "Products", params: { page: this.getPage } });
+        })
+        .catch((e) => {
+          console.log(e);
+        })
+        .finally(() => {
+          this.loading = false;
+        });
     },
   },
   mounted() {
-    if (this.getCharacters.length === 0) {
-      this.loadProducts();
-    }
+    this.loadProducts();
   },
 };
 </script>

@@ -6,7 +6,7 @@
     <li
       v-for="num in nicePagination"
       :key="num"
-      @click="changePage(num)"
+      @click="changePage(num), $emit('loadByPage')"
       class="child mx-1 p-2 rounded-full cursor-pointer"
       :class="this.page === num ? 'bg-cyan-500' : ''"
     >

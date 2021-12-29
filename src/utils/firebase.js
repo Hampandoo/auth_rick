@@ -2,7 +2,7 @@ import { initializeApp } from 'firebase/app'
 import { getFirestore } from "firebase/firestore"
 
 const config = {
-    apiKey: "AIzaSyB6Ya19qGtzhrAf6YyZUFrVnPj_-iEm0u4",
+    apiKey: process.env.VUE_APP_BACKEND_API_KEY,
     authDomain: "rick-backend.firebaseapp.com",
     databaseURL: "https://rick-backend-default-rtdb.europe-west1.firebasedatabase.app",
     projectId: "rick-backend",

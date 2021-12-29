@@ -1,5 +1,5 @@
 import axios from 'axios';
-import router from '../../router';
+import { error } from "../../utils/error"
 
 export const products = {
   namespaced: true,
@@ -7,13 +7,15 @@ export const products = {
     characters: [],
     filtered: [],
     page: 1,
-    card: null
+    card: null,
+    cardsPerPage: 20,
+    maxPages: 0
   },
   mutations: {
     LOAD_CHARACTERS(state, characters) {
-      state.characters.push(...characters)
+      state.characters = characters
     },
-    GET_FILTER(state, checked) {
+    SET_FILTER(state, checked) {
       state.filtered = checked;
     },
     CHANGE_PAGE(state, page) {
@@ -21,25 +23,29 @@ export const products = {
     },
     CHARACTER_ID(state, item) {
       state.card = item
+    },
+    SET_MAX_PAGES(state, count) {
+      state.maxPages = count
     }
   },
   actions: {
-    async load({ commit }) {
-      let loadPage = "https://rickandmortyapi.com/api/character?page=1"
+    async load({ commit, state }) {
+      let url = `https://rickandmortyapi.com/api/character/?page=${state.page}&status=${state.filtered.status}&gender=${state.filtered.gender}&species=${state.filtered.species}`
 
-      while (loadPage !== null) {
-        await axios
-        .get(loadPage)
+      await axios
+        .get(url)
         .then(response => {
           commit('LOAD_CHARACTERS', response.data.results)
-          loadPage = response.data.info.next
+          commit('SET_MAX_PAGES', response.data.info.pages)
         })
-      }
+        .catch(e => {
+          throw error(e.response.status)
+        })
     },
-    filterList({ commit }, checked) {
-      commit("GET_FILTER", checked);
+    setFilterList({ commit }, checked) {
+      commit("SET_FILTER", checked);
     },
-    changePage({commit}, page) {
+    changePage({ commit }, page) {
       commit("CHANGE_PAGE", page)
     },
   },
@@ -47,23 +53,8 @@ export const products = {
     getCharacters(state) {
       return state.characters;
     },
-    getFilteredCharacters(state) {
-      return state.characters.filter((item) => {
-          return Object.keys(state.filtered).every(el => {
-           if(state.filtered[el].length === 0 || state.filtered[el].includes(item[el])) return true
-         })
-      })
-    },
-    getPaginationCharacters(state, getters) {
-      const start = (state.page - 1) * 7;
-      const end = state.page * 7;
-
-      router.push({name: 'Products', params: {page: state.page}})
-
-      return getters.getFilteredCharacters.slice(start, end)
-    },
-    pageCount(state, getters) {
-      return Math.ceil(getters.getFilteredCharacters.length / 7)
+    pageCount(state) {
+      return state.maxPages
     },
     getPage(state) {
       return state.page

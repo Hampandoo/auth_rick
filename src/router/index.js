@@ -48,6 +48,15 @@ const routes = [
       layout: "auth",
       auth: false
     }
+  },
+  {
+    name: "Chat",
+    path: "/chat",
+    component: () => import('../views/Chat'),
+    meta: {
+      layout: "user",
+      auth: true
+    }
   }
 ];
 

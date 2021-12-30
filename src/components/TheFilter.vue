@@ -1,6 +1,6 @@
 <template>
   <section class="mx-auto border-b-2">
-    <div class="py-4 px-4 flex justify-center">
+    <div class="p-4 px-4 flex justify-center items-end">
       <div class="mx-6">
         <h3 class="font-bold text-lg text-gray-500">Status:</h3>
         <select
@@ -56,7 +56,17 @@
           </option>
         </select>
       </div>
-      <button @click="loadCharacters(checked), $emit('loadByFilter')">
+      <button
+        class="
+          border-2 border-cyan-500
+          px-2
+          py-1
+          rounded
+          font-semibold
+          bg-gray-200
+        "
+        @click="loadCharacters(checked), $emit('loadByFilter')"
+      >
         Filtering
       </button>
     </div>

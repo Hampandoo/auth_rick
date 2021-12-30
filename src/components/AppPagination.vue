@@ -1,13 +1,13 @@
 <template>
   <ul
-    class="flex mx-auto my-2 border-l-2 border-cyan-500"
+    class="inline-block my-2 border-2 border-cyan-500"
     v-if="nicePagination.length > 0"
   >
     <li
       v-for="num in nicePagination"
       :key="num"
       @click="changePage(num), $emit('loadByPage')"
-      class="child mx-1 p-2 rounded-full cursor-pointer"
+      class="child px-2 py-1 cursor-pointer inline-block"
       :class="this.page === num ? 'bg-cyan-500' : ''"
     >
       <span class="text-gray-800 text-lg font-bold select-none">
@@ -34,7 +34,9 @@ export default {
       return jojo.filter((item) => {
         if (
           item === 1 ||
-          Math.abs(this.page - item) < 2 ||
+          (item < 7 && this.page < 4) ||
+          Math.abs(this.page - item) < 3 ||
+          (this.pageCount - 4 < this.page && item > this.pageCount - 6) ||
           item === this.pageCount
         ) {
           return true;

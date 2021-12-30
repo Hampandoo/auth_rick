@@ -1,6 +1,6 @@
 <template>
   <the-filter @loadByFilter="loadProducts" />
-  <app-pagination @loadByPage="loadProducts" v-if="!loading" />
+  <app-pagination @loadByPage="loadProducts" />
 
   <section
     v-if="getCharacters.length && !loading"

@@ -4,7 +4,7 @@
 
   <section
     v-if="getCharacters.length && !loading"
-    class="py-4 pr-2 bg-white rounded-lg shadow-md lg:shadow-lg"
+    class="py-4 bg-white rounded-lg shadow-md lg:shadow-lg"
   >
     <div
       v-for="item in getCharacters"

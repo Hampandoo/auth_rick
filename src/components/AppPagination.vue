@@ -1,6 +1,6 @@
 <template>
   <ul
-    class="inline-block my-2 border-2 border-cyan-500"
+    class="inline-block my-2 border-2 border-cyan-500 mx-2"
     v-if="nicePagination.length > 0"
   >
     <li

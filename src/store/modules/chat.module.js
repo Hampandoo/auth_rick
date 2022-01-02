@@ -13,14 +13,15 @@ import {
   deleteDoc,
   set,
   setDoc,
-  arrayUnion
+  arrayUnion,
+  onSnapshot
 } from "@firebase/firestore";
 
 export const chat = {
   namespaced: true,
   state: {
-    currentChatMessages: [],
-    currentRoomID: ""
+    currentChatMessages: null,
+    currentRoomID: "",
   },
   mutations: {
     FILL_CURRENT_CHAT_MESSAGES(state, payload) {
@@ -32,7 +33,7 @@ export const chat = {
   },
   actions: {
     async createNewConversation({ commit }, payload) {
-      const newChat = await addDoc(collection(firestore, "chats"), {
+      await addDoc(collection(firestore, "chats"), {
         conversation: [{ email: 'Welcome!', message: 'New conversation created!', time: Date.now() }],
         users: [localStorage.getItem('email').toLowerCase(), payload.email.toLowerCase()]
       })
@@ -56,12 +57,25 @@ export const chat = {
 
     async loadConversations({ commit, dispatch, state }, payload) {
       try {
+        // Looking for ID of conversation in database
         await dispatch('findRoomID', payload)
 
-        const finall = await getDoc(doc(firestore, "chats", state.currentRoomID))
-        return finall.data().conversation
+        const response = await getDoc(doc(firestore, "chats", state.currentRoomID))
+
+        // subscribe to update of messages for this conversation
+        await dispatch('updateMessageList')
+
+        commit('FILL_CURRENT_CHAT_MESSAGES', response.data().conversation)
       } catch (e) {
         console.log("Error 0")
+      }
+    },
+
+    updateMessageList({ commit, state }) {
+      if (state.currentRoomID) {
+        const kek = onSnapshot(doc(firestore, "chats", state.currentRoomID), (doc) => {
+          commit('FILL_CURRENT_CHAT_MESSAGES', doc.data().conversation)
+        })
       }
     },
 
@@ -123,5 +137,9 @@ export const chat = {
       }
     }
   },
-  getters: {}
+  getters: {
+    getMessages(state) {
+      return state.currentChatMessages
+    }
+  }
 }

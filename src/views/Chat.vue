@@ -44,29 +44,15 @@
     <app-chat-messages
       v-if="searchedUser"
       :searchedUser="searchedUser"
-      :messages="messages"
+      :messages="jojo"
     />
   </section>
 </template>
 
 <script>
 import AppSearchedUser from "../components/chatComponents/AppSearchedUser.vue";
-import firestore from "../utils/firebase";
 import AppChatMessages from "../components/chatComponents/AppChatMessages.vue";
-import {
-  collection,
-  query,
-  getDocs,
-  where,
-  orderBy,
-  addDoc,
-  doc,
-  updateDoc,
-  deleteDoc,
-  set,
-  setDoc,
-} from "@firebase/firestore";
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "Chat",
@@ -78,9 +64,16 @@ export default {
     return {
       searchField: "",
       searchedUser: {},
-      messages: null,
       textUserDoesNotExist: "",
     };
+  },
+  computed: {
+    ...mapGetters({
+      getMessages: "chat/getMessages",
+    }),
+    jojo() {
+      return this.getMessages;
+    },
   },
   methods: {
     ...mapActions({
@@ -90,7 +83,7 @@ export default {
     }),
 
     async createNewChat(searchedUser) {
-      const info = await this.createNewConversation(searchedUser);
+      await this.createNewConversation(searchedUser);
     },
 
     async searchByEmail() {
@@ -111,15 +104,15 @@ export default {
 
     async loadOrCreateNewChat(anotherUser) {
       try {
-        const conversation = await this.loadConversations(anotherUser);
-        if (conversation) {
-          this.messages = conversation;
+        await this.loadConversations(anotherUser);
+        if (this.getMessages) {
           return;
         } else {
           this.createNewChat(this.searchedUser);
+          this.loadOrCreateNewChat(anotherUser);
         }
       } catch (e) {
-        console.log("Error 1");
+        console.log(e);
       }
     },
   },

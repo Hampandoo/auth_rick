@@ -88,46 +88,12 @@
           </div>
         </div>
       </div>
-      <!-- <div class="chat-message">
-        <div class="flex items-end justify-end">
-          <div
-            class="
-              flex flex-col
-              space-y-2
-              text-xs
-              max-w-xs
-              mx-2
-              order-1
-              items-end
-            "
-          >
-            <div>
-              <h3 class="bg-gray-800 text-white text-lg rounded-tl px-4">
-                Username
-              </h3>
-              <span
-                class="
-                  px-4
-                  py-2
-                  rounded-lg
-                  inline-block
-                  rounded-tr-none rounded-tl-none
-                  bg-cyan-500
-                  text-white text-sm
-                  leading-tight
-                "
-                >Your error message says permission denied, npm global installs
-                must be given root privileges.</span
-              >
-            </div>
-          </div>
-        </div>
-      </div> -->
     </div>
 
     <div class="pt-4 mb-2 sm:mb-0">
       <div class="flex">
         <input
+          @keypress.enter="sendMessage(newMessage)"
           v-model="newMessage"
           type="text"
           placeholder="Write Something"
@@ -182,8 +148,6 @@
 
 <script>
 import { mapActions } from "vuex";
-import fireDB from "../../utils/firebase";
-import { set, ref, push } from "firebase/database";
 
 export default {
   props: ["messages", "searchedUser"],
@@ -205,6 +169,10 @@ export default {
       await this.send(newMessage);
       this.newMessage = "";
     },
+    updateScroll() {
+      let chatScroll = document.getElementById("messages");
+      chatScroll.scrollTop = chatScroll.scrollHeight;
+    },
   },
 };
 </script>
@@ -213,11 +181,12 @@ export default {
 .scrollbar-w-2::-webkit-scrollbar {
   width: 0.25rem;
   height: 0.25rem;
+  position: relative;
+  bottom: 0;
 }
 
 .scrollbar-track-blue-lighter::-webkit-scrollbar-track {
-  background-color: #f7fafc;
-  background-color: rgb(255, 255, 255);
+  background-color: #fff;
 }
 
 .scrollbar-thumb-blue::-webkit-scrollbar-thumb {

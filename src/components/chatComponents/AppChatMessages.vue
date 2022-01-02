@@ -47,10 +47,10 @@
               flex flex-col
               space-y-2
               text-sm
-              max-w-xs
               mx-2
               order-2
               items-start
+              overflow-x-hidden
             "
           >
             <div>
@@ -61,6 +61,7 @@
                 class="
                   px-4
                   py-2
+                  max-w-lg
                   rounded-lg
                   inline-block
                   rounded-tr-none rounded-tl-none
@@ -154,6 +155,7 @@ export default {
   data() {
     return {
       newMessage: "",
+      lol: "",
     };
   },
   computed: {
@@ -166,12 +168,19 @@ export default {
       send: "chat/sendNewMessage",
     }),
     async sendMessage(newMessage) {
-      await this.send(newMessage);
+      if (newMessage) {
+        await this.send(newMessage);
+      }
       this.newMessage = "";
     },
     updateScroll() {
       let chatScroll = document.getElementById("messages");
       chatScroll.scrollTop = chatScroll.scrollHeight;
+    },
+  },
+  watch: {
+    messages() {
+      this.updateScroll();
     },
   },
 };
@@ -186,12 +195,12 @@ export default {
 }
 
 .scrollbar-track-blue-lighter::-webkit-scrollbar-track {
-  background-color: #fff;
+  background-color: #06b6d4;
 }
 
 .scrollbar-thumb-blue::-webkit-scrollbar-thumb {
   background-color: #edf2f7;
-  background-color: blue;
+  background-color: #1f2937;
 }
 
 .scrollbar-thumb-rounded::-webkit-scrollbar-thumb {

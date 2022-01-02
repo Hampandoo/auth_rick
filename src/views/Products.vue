@@ -109,7 +109,6 @@ export default {
   },
   methods: {
     ...mapActions({
-      openCharacter: "products/openCharacter",
       load: "products/load",
     }),
     loadProducts() {

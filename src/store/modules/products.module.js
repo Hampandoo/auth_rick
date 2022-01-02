@@ -39,7 +39,12 @@ export const products = {
           commit('SET_MAX_PAGES', response.data.info.pages)
         })
         .catch(e => {
-          throw error(e.response.status)
+          if (e.response.status === 404) {
+            commit('LOAD_CHARACTERS', [])
+            commit('SET_MAX_PAGES', 0)
+          } else {
+            throw error(e.response.status)
+          }
         })
     },
     setFilterList({ commit }, checked) {

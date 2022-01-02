@@ -62,10 +62,10 @@ export default {
 </script>
 
 <style scoped>
-.child:first-child {
+/* .child:first-child {
   margin-right: 0.75rem;
 }
 .child:last-child {
   margin-left: 0.75rem;
-}
+} */
 </style>

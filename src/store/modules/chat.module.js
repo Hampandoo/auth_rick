@@ -30,6 +30,9 @@ export const chat = {
     },
     SET_CURRENT_ROOM_ID(state, payload) {
       state.currentRoomID = payload
+    },
+    CLEAR_MESSAGE_LIST(state) {
+      state.currentChatMessages = null
     }
   },
   actions: {
@@ -38,6 +41,10 @@ export const chat = {
         conversation: [{ email: 'Welcome!', message: 'New conversation created!', time: Date.now() }],
         users: [localStorage.getItem('email').toLowerCase(), payload.email.toLowerCase()]
       })
+    },
+
+    clearMessageList({ commit }) {
+      commit('CLEAR_MESSAGE_LIST')
     },
 
     sendNewMessage({ commit, state }, payload) {

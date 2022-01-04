@@ -84,6 +84,7 @@ export default {
       searchUser: "chat/searchByEmail",
       loadConversations: "chat/loadConversations",
       createNewConversation: "chat/createNewConversation",
+      clearMessageList: "chat/clearMessageList",
     }),
 
     async createNewChat(searchedUser) {
@@ -123,13 +124,8 @@ export default {
       }
     },
   },
-  created() {
-    this.searchedUser = {};
-  },
-  destroyed() {
-    this.searchField = "";
-    this.searchedUser = {};
-    this.textUserDoesNotExist = "";
+  unmounted() {
+    this.clearMessageList();
   },
 };
 </script>

@@ -16,6 +16,7 @@ import {
   arrayUnion,
   onSnapshot
 } from "@firebase/firestore";
+import { error } from "../../utils/error"
 
 export const chat = {
   namespaced: true,
@@ -67,7 +68,7 @@ export const chat = {
 
         commit('FILL_CURRENT_CHAT_MESSAGES', response.data().conversation)
       } catch (e) {
-        console.log("Error 0")
+        throw error(e.code)
       }
     },
 
@@ -119,7 +120,7 @@ export const chat = {
         const searchingUser = await getDocs(
           query(
             collection(firestore, "users"),
-            where("email", "==", payload)
+            where("email", "==", payload.toLowerCase())
           )
         );
 

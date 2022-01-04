@@ -44,7 +44,7 @@
     <app-chat-messages
       v-if="searchedUser && !loading"
       :searchedUser="searchedUser"
-      :messages="jojo"
+      :messages="conversationMessages"
     />
     <app-loader :class="'mx-auto'" v-else />
   </section>
@@ -75,7 +75,7 @@ export default {
     ...mapGetters({
       getMessages: "chat/getMessages",
     }),
-    jojo() {
+    conversationMessages() {
       return this.getMessages;
     },
   },
@@ -115,21 +115,21 @@ export default {
       try {
         this.loading = true;
         await this.loadConversations(anotherUser);
-        if (this.getMessages) {
-          return;
-        } else {
-          this.createNewChat(this.searchedUser);
-          this.loadOrCreateNewChat(anotherUser);
-        }
       } catch (e) {
-        console.log(e);
+        this.createNewChat(this.searchedUser);
+        this.loadOrCreateNewChat(anotherUser);
       } finally {
         this.loading = false;
       }
     },
   },
-  mounted() {
+  created() {
     this.searchedUser = {};
+  },
+  destroyed() {
+    this.searchField = "";
+    this.searchedUser = {};
+    this.textUserDoesNotExist = "";
   },
 };
 </script>

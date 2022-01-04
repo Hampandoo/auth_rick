@@ -1,5 +1,5 @@
 <template>
-  <section class="flex-1 p:2 sm:p-6 justify-between flex mx-auto shadow-2xl">
+  <section class="flex-1 p:2 sm:p-6 flex mx-auto shadow-2xl">
     <div class="my-4 bg-gray-300 p-4 rounded flex flex-col w-60">
       <form action="submit" @keypress.enter.prevent="searchByEmail">
         <input
@@ -42,16 +42,18 @@
       </div>
     </div>
     <app-chat-messages
-      v-if="searchedUser"
+      v-if="searchedUser && !loading"
       :searchedUser="searchedUser"
       :messages="jojo"
     />
+    <app-loader :class="'mx-auto'" v-else />
   </section>
 </template>
 
 <script>
 import AppSearchedUser from "../components/chatComponents/AppSearchedUser.vue";
 import AppChatMessages from "../components/chatComponents/AppChatMessages.vue";
+import AppLoader from "../components/AppLoader.vue";
 import { mapActions, mapGetters } from "vuex";
 
 export default {
@@ -59,12 +61,14 @@ export default {
   components: {
     AppChatMessages,
     AppSearchedUser,
+    AppLoader,
   },
   data() {
     return {
       searchField: "",
       searchedUser: {},
       textUserDoesNotExist: "",
+      loading: false,
     };
   },
   computed: {
@@ -88,6 +92,11 @@ export default {
 
     async searchByEmail() {
       try {
+        if (this.searchField === localStorage.getItem("email")) {
+          this.searchField = "";
+          return;
+        }
+
         this.textUserDoesNotExist = "";
         const user = await this.searchUser(this.searchField);
         if (user.email) {
@@ -104,6 +113,7 @@ export default {
 
     async loadOrCreateNewChat(anotherUser) {
       try {
+        this.loading = true;
         await this.loadConversations(anotherUser);
         if (this.getMessages) {
           return;
@@ -113,6 +123,8 @@ export default {
         }
       } catch (e) {
         console.log(e);
+      } finally {
+        this.loading = false;
       }
     },
   },

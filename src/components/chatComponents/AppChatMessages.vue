@@ -13,7 +13,9 @@
   >
     <div class="flex sm:items-center justify-between py-3">
       <div class="text-2xl mt-1 flex items-center mx-4">
-        <span class="text-gray-700 mr-3">to: {{ searchedUser.email }}</span>
+        <span class="text-gray-700 mr-3"
+          >to: {{ messages ? searchedUser.email : "" }}</span
+        >
       </div>
     </div>
 
@@ -61,10 +63,7 @@
                 class="
                   px-4
                   py-2
-                  max-w-lg
-                  rounded-lg
                   inline-block
-                  rounded-tr-none rounded-tl-none
                   bg-cyan-500
                   text-white text-sm
                   leading-tight
@@ -72,19 +71,20 @@
                 "
                 >{{ message.message }}</span
               >
-              <!-- <span
+              <span
                 class="
                   px-4
                   py-2
                   rounded-lg
                   inline-block
                   rounded-tr-none rounded-tl-none
-                  bg-cyan-500
+                  bg-gray-400
                   text-white text-sm
                   leading-tight
+                  w-full
                 "
-                >{{ message.time }}</span
-              > -->
+                >{{ message.time ? formatDate(message.time) : "" }}</span
+              >
             </div>
           </div>
         </div>
@@ -155,7 +155,6 @@ export default {
   data() {
     return {
       newMessage: "",
-      lol: "",
     };
   },
   computed: {
@@ -177,11 +176,19 @@ export default {
       let chatScroll = document.getElementById("messages");
       chatScroll.scrollTop = chatScroll.scrollHeight;
     },
+    formatDate(time) {
+      const formatArray = new Date(time).toString().split(" ");
+      formatArray[4] = formatArray[4].split(":").slice(0, 2).join(":");
+      return `${formatArray[4]} (${formatArray[1]} ${formatArray[2]})`;
+    },
   },
   watch: {
     messages() {
       this.updateScroll();
     },
+  },
+  mounted() {
+    this.updateScroll();
   },
 };
 </script>

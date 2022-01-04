@@ -13,7 +13,7 @@
   >
     <div class="flex sm:items-center justify-between py-3">
       <div class="text-2xl mt-1 flex items-center mx-4">
-        <span class="text-gray-700 mr-3"
+        <span class="text-gray-700 mr-3 shadow"
           >to: {{ messages ? searchedUser.email : "" }}</span
         >
       </div>
@@ -64,7 +64,7 @@
                   px-4
                   py-2
                   inline-block
-                  bg-cyan-500
+                  bg-gray-500
                   text-white text-sm
                   leading-tight
                   w-full
@@ -73,13 +73,15 @@
               >
               <span
                 class="
-                  px-4
-                  py-2
+                  text-center
+                  px-2
+                  py-1
+                  justify-self-center
                   rounded-lg
                   inline-block
                   rounded-tr-none rounded-tl-none
-                  bg-gray-400
-                  text-white text-sm
+                  bg-gray-500
+                  text-gray-100 text-xs
                   leading-tight
                   w-full
                 "

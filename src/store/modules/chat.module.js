@@ -135,6 +135,24 @@ export const chat = {
         console.log(e);
         console.log('Search by email Error')
       }
+    },
+    async checkChatAccount() {
+      try {
+        const checkAccount = await getDocs(
+          query(
+            collection(firestore, "users"),
+            where("email", "==", localStorage.getItem('email'))
+          )
+        );
+
+        if (checkAccount.size === 0) {
+          await setDoc(doc(firestore, "users", localStorage.getItem('localId')), {
+            email: localStorage.getItem('email')
+          })
+        }
+      } catch (e) {
+        console.log(e)
+      }
     }
   },
   getters: {

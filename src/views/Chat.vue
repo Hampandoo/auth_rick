@@ -23,23 +23,23 @@
         @click="loadOrCreateNewChat(searchedUser)"
       />
 
-      <div class="rounded flex text-white bg-gray-800 p-2 items-center">
+      <!-- <div class="rounded flex text-white bg-gray-800 p-2 items-center">
         <img
           class="w-20 h-20 rounded-full object-cover"
           src="https://novy.tv/wp-content/uploads/sites/96/2015/09/shrek.jpg"
           alt="user profile photo"
         />
         <h3 class="align-center ml-2 wrap overflow-hidden">User Email</h3>
-      </div>
+      </div> -->
 
-      <div class="rounded flex text-white bg-gray-800 p-2 my-2 items-center">
+      <!-- <div class="rounded flex text-white bg-gray-800 p-2 my-2 items-center">
         <img
           class="w-20 h-20 rounded-full object-cover"
           src="https://is1-ssl.mzstatic.com/image/thumb/Podcasts123/v4/33/55/df/3355dfdd-55d9-53d4-e19f-5895b0e78664/mza_13237539387869463363.jpg/1200x1200bb.jpg"
           alt="user profile photo"
         />
         <h3 class="align-center ml-2 wrap overflow-hidden">User Email</h3>
-      </div>
+      </div> -->
     </div>
     <app-chat-messages
       v-if="searchedUser && !loading"
@@ -127,6 +127,9 @@ export default {
         this.loading = false;
       }
     },
+  },
+  mounted() {
+    this.searchedUser = {};
   },
 };
 </script>

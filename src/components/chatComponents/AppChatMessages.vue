@@ -13,7 +13,9 @@
   >
     <div class="flex sm:items-center justify-between py-3">
       <div class="text-2xl mt-1 flex items-center mx-4">
-        <span class="text-gray-700 mr-3">to: {{ searchedUser.email }}</span>
+        <span class="text-gray-700 mr-3 shadow"
+          >to: {{ messages ? searchedUser.email : "" }}</span
+        >
       </div>
     </div>
 
@@ -47,10 +49,10 @@
               flex flex-col
               space-y-2
               text-sm
-              max-w-xs
               mx-2
               order-2
               items-start
+              overflow-x-hidden
             "
           >
             <div>
@@ -61,73 +63,40 @@
                 class="
                   px-4
                   py-2
-                  rounded-lg
                   inline-block
-                  rounded-tr-none rounded-tl-none
-                  bg-cyan-500
+                  bg-gray-500
                   text-white text-sm
                   leading-tight
                   w-full
                 "
                 >{{ message.message }}</span
               >
-              <!-- <span
-                class="
-                  px-4
-                  py-2
-                  rounded-lg
-                  inline-block
-                  rounded-tr-none rounded-tl-none
-                  bg-cyan-500
-                  text-white text-sm
-                  leading-tight
-                "
-                >{{ message.time }}</span
-              > -->
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- <div class="chat-message">
-        <div class="flex items-end justify-end">
-          <div
-            class="
-              flex flex-col
-              space-y-2
-              text-xs
-              max-w-xs
-              mx-2
-              order-1
-              items-end
-            "
-          >
-            <div>
-              <h3 class="bg-gray-800 text-white text-lg rounded-tl px-4">
-                Username
-              </h3>
               <span
                 class="
-                  px-4
-                  py-2
+                  text-center
+                  px-2
+                  py-1
+                  justify-self-center
                   rounded-lg
                   inline-block
                   rounded-tr-none rounded-tl-none
-                  bg-cyan-500
-                  text-white text-sm
+                  bg-gray-500
+                  text-gray-100 text-xs
                   leading-tight
+                  w-full
                 "
-                >Your error message says permission denied, npm global installs
-                must be given root privileges.</span
+                >{{ message.time ? formatDate(message.time) : "" }}</span
               >
             </div>
           </div>
         </div>
-      </div> -->
+      </div>
     </div>
 
     <div class="pt-4 mb-2 sm:mb-0">
       <div class="flex">
         <input
+          @keypress.enter="sendMessage(newMessage)"
           v-model="newMessage"
           type="text"
           placeholder="Write Something"
@@ -182,8 +151,6 @@
 
 <script>
 import { mapActions } from "vuex";
-import fireDB from "../../utils/firebase";
-import { set, ref, push } from "firebase/database";
 
 export default {
   props: ["messages", "searchedUser"],
@@ -202,9 +169,28 @@ export default {
       send: "chat/sendNewMessage",
     }),
     async sendMessage(newMessage) {
-      await this.send(newMessage);
+      if (newMessage) {
+        await this.send(newMessage);
+      }
       this.newMessage = "";
     },
+    updateScroll() {
+      let chatScroll = document.getElementById("messages");
+      chatScroll.scrollTop = chatScroll.scrollHeight;
+    },
+    formatDate(time) {
+      const formatArray = new Date(time).toString().split(" ");
+      formatArray[4] = formatArray[4].split(":").slice(0, 2).join(":");
+      return `${formatArray[4]} (${formatArray[1]} ${formatArray[2]})`;
+    },
+  },
+  watch: {
+    messages() {
+      this.updateScroll();
+    },
+  },
+  mounted() {
+    this.updateScroll();
   },
 };
 </script>
@@ -213,16 +199,17 @@ export default {
 .scrollbar-w-2::-webkit-scrollbar {
   width: 0.25rem;
   height: 0.25rem;
+  position: relative;
+  bottom: 0;
 }
 
 .scrollbar-track-blue-lighter::-webkit-scrollbar-track {
-  background-color: #f7fafc;
-  background-color: rgb(255, 255, 255);
+  background-color: #06b6d4;
 }
 
 .scrollbar-thumb-blue::-webkit-scrollbar-thumb {
   background-color: #edf2f7;
-  background-color: blue;
+  background-color: #1f2937;
 }
 
 .scrollbar-thumb-rounded::-webkit-scrollbar-thumb {

@@ -9,6 +9,7 @@
     <div
       v-for="item in getCharacters"
       :key="item"
+      @click="openCard(item)"
       class="
         flex flex-row
         overflow-hidden
@@ -22,6 +23,7 @@
         mx-auto
         border border-cyan-500
         h-64
+        cursor-pointer
       "
     >
       <div class="h-full w-1/2">
@@ -109,9 +111,14 @@ export default {
   },
   methods: {
     ...mapActions({
-      openCharacter: "products/openCharacter",
       load: "products/load",
+      setCard: "products/setCard",
     }),
+    openCard(card) {
+      this.setCard(card);
+      router.push({ name: "Card", params: { id: card.id } });
+      console.log(card);
+    },
     loadProducts() {
       this.loading = true;
       this.load()

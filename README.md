@@ -1,23 +1,11 @@
 # rick_auth
 
-## Project setup
-```
-npm install
+## Project
 ```
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+This project with JWT authentication, products filter and online chat.
 
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
++ Tailwind
 ```
 
 ### Customize configuration

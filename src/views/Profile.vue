@@ -86,6 +86,7 @@ export default {
   methods: {
     ...mapActions({
       getProfile: "user/getProfile",
+      checkChatAccount: "chat/checkChatAccount",
     }),
     loadProfile() {
       this.loading = true;
@@ -96,6 +97,7 @@ export default {
   },
   mounted() {
     this.loadProfile();
+    this.checkChatAccount();
   },
 };
 </script>

@@ -58,6 +58,30 @@
       >
         Profile
       </router-link>
+
+      <router-link
+        to="/chat"
+        :class="[
+          {
+            'border-b-4 border-cyan-500':
+              $route.name === 'Chat' || $route.path === '/chat/:coonversation',
+          },
+        ]"
+        class="
+          px-4
+          py-2
+          mx-4
+          bg-gray-800
+          rounded-sm
+          font-medium
+          text-white
+          uppercase
+          focus:outline-none
+          cursor-pointer
+        "
+      >
+        Chat
+      </router-link>
     </div>
 
     <div class="flex items-center space-x-2">

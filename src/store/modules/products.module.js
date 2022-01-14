@@ -26,6 +26,9 @@ export const products = {
     },
     SET_MAX_PAGES(state, count) {
       state.maxPages = count
+    },
+    SET_CARD(state, card) {
+      state.card = card
     }
   },
   actions: {
@@ -39,7 +42,12 @@ export const products = {
           commit('SET_MAX_PAGES', response.data.info.pages)
         })
         .catch(e => {
-          throw error(e.response.status)
+          if (e.response.status === 404) {
+            commit('LOAD_CHARACTERS', [])
+            commit('SET_MAX_PAGES', 0)
+          } else {
+            throw error(e.response.status)
+          }
         })
     },
     setFilterList({ commit }, checked) {
@@ -48,6 +56,9 @@ export const products = {
     changePage({ commit }, page) {
       commit("CHANGE_PAGE", page)
     },
+    setCard({ commit }, card) {
+      commit('SET_CARD', card)
+    }
   },
   getters: {
     getCharacters(state) {

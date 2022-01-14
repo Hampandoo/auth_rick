@@ -13,14 +13,16 @@ import {
   deleteDoc,
   set,
   setDoc,
-  arrayUnion
+  arrayUnion,
+  onSnapshot
 } from "@firebase/firestore";
+import { error } from "../../utils/error"
 
 export const chat = {
   namespaced: true,
   state: {
-    currentChatMessages: [],
-    currentRoomID: ""
+    currentChatMessages: null,
+    currentRoomID: "",
   },
   mutations: {
     FILL_CURRENT_CHAT_MESSAGES(state, payload) {
@@ -28,14 +30,21 @@ export const chat = {
     },
     SET_CURRENT_ROOM_ID(state, payload) {
       state.currentRoomID = payload
+    },
+    CLEAR_MESSAGE_LIST(state) {
+      state.currentChatMessages = null
     }
   },
   actions: {
     async createNewConversation({ commit }, payload) {
-      const newChat = await addDoc(collection(firestore, "chats"), {
+      await addDoc(collection(firestore, "chats"), {
         conversation: [{ email: 'Welcome!', message: 'New conversation created!', time: Date.now() }],
         users: [localStorage.getItem('email').toLowerCase(), payload.email.toLowerCase()]
       })
+    },
+
+    clearMessageList({ commit }) {
+      commit('CLEAR_MESSAGE_LIST')
     },
 
     sendNewMessage({ commit, state }, payload) {
@@ -56,12 +65,25 @@ export const chat = {
 
     async loadConversations({ commit, dispatch, state }, payload) {
       try {
+        // Looking for ID of conversation in database
         await dispatch('findRoomID', payload)
 
-        const finall = await getDoc(doc(firestore, "chats", state.currentRoomID))
-        return finall.data().conversation
+        const response = await getDoc(doc(firestore, "chats", state.currentRoomID))
+
+        // subscribe to update of messages for this conversation
+        await dispatch('updateMessageList')
+
+        commit('FILL_CURRENT_CHAT_MESSAGES', response.data().conversation)
       } catch (e) {
-        console.log("Error 0")
+        throw error(e.code)
+      }
+    },
+
+    updateMessageList({ commit, state }) {
+      if (state.currentRoomID) {
+        const kek = onSnapshot(doc(firestore, "chats", state.currentRoomID), (doc) => {
+          commit('FILL_CURRENT_CHAT_MESSAGES', doc.data().conversation)
+        })
       }
     },
 
@@ -105,7 +127,7 @@ export const chat = {
         const searchingUser = await getDocs(
           query(
             collection(firestore, "users"),
-            where("email", "==", payload)
+            where("email", "==", payload.toLowerCase())
           )
         );
 
@@ -121,7 +143,29 @@ export const chat = {
         console.log(e);
         console.log('Search by email Error')
       }
+    },
+    async checkChatAccount() {
+      try {
+        const checkAccount = await getDocs(
+          query(
+            collection(firestore, "users"),
+            where("email", "==", localStorage.getItem('email'))
+          )
+        );
+
+        if (checkAccount.size === 0) {
+          await setDoc(doc(firestore, "users", localStorage.getItem('localId')), {
+            email: localStorage.getItem('email')
+          })
+        }
+      } catch (e) {
+        console.log(e)
+      }
     }
   },
-  getters: {}
+  getters: {
+    getMessages(state) {
+      return state.currentChatMessages
+    }
+  }
 }

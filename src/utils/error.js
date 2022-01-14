@@ -5,7 +5,8 @@ const ERRORS = {
   EMAIL_EXISTS: "This email is already in use",
   TOO_MANY_ATTEMPTS_TRY_LATER: "We have blocked all requests from this device due to unusual activity. Try later",
   DEFAULT_ERROR: "DEFAULT_ERROR",
-  404: "INCORRECT_REQUEST"
+  404: "INCORRECT_REQUEST",
+  'invalid-argument': 'CREATE_CHAT_ERROR'
 }
 
 export function error(e) {

@@ -6,7 +6,7 @@ module.exports = {
       colors: {
         'lime-500': '#84cc16',
         'cyan-500': '#06b6d4'
-      },
+      }
     },
   },
   variants: {

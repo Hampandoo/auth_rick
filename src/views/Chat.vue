@@ -27,7 +27,7 @@
     <app-chat-messages
       v-if="!loading"
       :searchedUser="searchedUser"
-      :messages="conversationMessages"
+      :messages="getMessages"
     />
     <app-loader :class="'mx-auto'" v-else />
   </section>
@@ -58,9 +58,6 @@ export default {
     ...mapGetters({
       getMessages: "chat/getMessages",
     }),
-    conversationMessages() {
-      return this.getMessages;
-    },
   },
   methods: {
     ...mapActions({
@@ -76,6 +73,8 @@ export default {
 
     async searchByEmail() {
       try {
+        this.clearMessageList();
+
         if (this.searchField === localStorage.getItem("email")) {
           this.searchField = "";
           return;

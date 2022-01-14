@@ -4,14 +4,10 @@ import {
   query,
   getDocs,
   where,
-  orderBy,
   addDoc,
   getDoc,
   doc,
-  get,
   updateDoc,
-  deleteDoc,
-  set,
   setDoc,
   arrayUnion,
   onSnapshot
@@ -81,7 +77,7 @@ export const chat = {
 
     updateMessageList({ commit, state }) {
       if (state.currentRoomID) {
-        const kek = onSnapshot(doc(firestore, "chats", state.currentRoomID), (doc) => {
+        const update = onSnapshot(doc(firestore, "chats", state.currentRoomID), (doc) => {
           commit('FILL_CURRENT_CHAT_MESSAGES', doc.data().conversation)
         })
       }

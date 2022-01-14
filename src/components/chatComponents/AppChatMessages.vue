@@ -93,7 +93,7 @@
       </div>
     </div>
 
-    <div class="pt-4 mb-2 sm:mb-0">
+    <div v-if="messages" class="pt-4 mb-2 sm:mb-0">
       <div class="flex">
         <input
           @keypress.enter="sendMessage(newMessage)"

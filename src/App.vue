@@ -5,20 +5,19 @@
 </template>
 
 <script>
-import UserLayout from './layouts/UserLayout.vue'
-import AuthLayout from './layouts/AuthLayout.vue'
+import UserLayout from "./layouts/UserLayout.vue";
+import AuthLayout from "./layouts/AuthLayout.vue";
 
 export default {
   components: {
     UserLayout,
-    AuthLayout
+    AuthLayout,
   },
   computed: {
     layout() {
-      return this.$route.meta.layout
-    }
-  }
+      return this.$route.meta.layout;
+    },
+  },
 };
 </script>
 
-<style></style>

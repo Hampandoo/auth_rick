@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-1 p:2 sm:p-6 flex flex-col md:w-2/3 w-full mx-auto">
+  <div class="flex-1 px-2 sm:px-6 flex flex-col md:w-2/3 w-full mx-auto">
     <div v-if="messages" class="flex sm:items-center justify-between py-3">
       <div class="text-2xl mt-1 flex items-center mx-4">
         <span class="text-gray-700 mr-3 shadow"
@@ -21,7 +21,7 @@
         scrollbar-w-2
         scrolling-touch
         bg-gray-200
-        hoho
+        height-60vh
       "
     >
       <div v-for="message in messages" :key="message.time" class="chat-message">
@@ -117,7 +117,7 @@ export default {
 </script>
 
 <style>
-.hoho {
+.height-60vh {
   height: 60vh;
 }
 

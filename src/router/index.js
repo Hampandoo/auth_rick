@@ -13,6 +13,15 @@ const routes = [
     },
   },
   {
+    name: "Card",
+    path: "/products/card/:id",
+    component: () => import('../components/AppCard'),
+    meta: {
+      layout: "user",
+      auth: true
+    }
+  },
+  {
     name: "Profile",
     path: "/profile",
     alias: "/",

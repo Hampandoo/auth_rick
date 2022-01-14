@@ -26,6 +26,9 @@ export const products = {
     },
     SET_MAX_PAGES(state, count) {
       state.maxPages = count
+    },
+    SET_CARD(state, card) {
+      state.card = card
     }
   },
   actions: {
@@ -53,6 +56,9 @@ export const products = {
     changePage({ commit }, page) {
       commit("CHANGE_PAGE", page)
     },
+    setCard({ commit }, card) {
+      commit('SET_CARD', card)
+    }
   },
   getters: {
     getCharacters(state) {

@@ -11,7 +11,7 @@
       mx-auto
     "
   >
-    <div class="flex sm:items-center justify-between py-3">
+    <div v-if="messages" class="flex sm:items-center justify-between py-3">
       <div class="text-2xl mt-1 flex items-center mx-4">
         <span class="text-gray-700 mr-3 shadow"
           >to: {{ messages ? searchedUser.email : "" }}</span
